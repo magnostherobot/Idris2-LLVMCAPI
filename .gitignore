@@ -1,0 +1,10 @@
+env.sh
+
+.build/
+build/
+depends/
+LLVMCAPI.ipkg
+
+*.idr~
+*.o
+*.so
