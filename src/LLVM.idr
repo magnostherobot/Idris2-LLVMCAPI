@@ -22,6 +22,7 @@ ContextRef    = Opaque "LLVMContextRef"
 prim__createModuleWithName : String -> PrimIO ModuleRef
 
 ||| Creates a module with the given name.
+public export
 createModuleWithName : HasIO io => String -> io ModuleRef
 createModuleWithName n = primIO $ prim__createModuleWithName n
 
@@ -29,9 +30,11 @@ createModuleWithName n = primIO $ prim__createModuleWithName n
 prim__addFunction : ModuleRef -> String -> TypeRef -> PrimIO ValueRef
 
 ||| Adds a function to a module, and returns the new function.
+public export
 addFunction : HasIO io => ModuleRef -> String -> TypeRef -> io ValueRef
 addFunction m n t = primIO $ prim__addFunction m n t
 
+public export
 %foreign (llvmext "LLVMVoidType")
 voidType : TypeRef
 
@@ -45,28 +48,31 @@ prim__functionType : (ret : TypeRef) ->
                      (variadic : Int) ->
                      TypeRef
 
-functionType : {argc : Nat} ->
+public export
+functionType' : {argc : Nat} ->
                (ret : TypeRef) ->
                (args : Arr argc TypeRef) ->
                (variadic : Bool) ->
                TypeRef
-functionType ret args variadic =
+functionType' ret args variadic =
   let args' = forgetArrType args
   in  prim__functionType ret args' (cast argc) (cast variadic)
 
-functionTypeVect : HasIO io =>
-                   {argc : Nat} ->
-                   (ret : TypeRef) ->
-                   (args : Vect argc TypeRef) ->
-                   (variadic : Bool) ->
-                   io TypeRef
-functionTypeVect ret args variadic =
+public export
+functionType : HasIO io =>
+               {argc : Nat} ->
+               (ret : TypeRef) ->
+               (args : Vect argc TypeRef) ->
+               (variadic : Bool) ->
+               io TypeRef
+functionType ret args variadic =
   do args' <- toArray args
-     pure $ functionType ret args' variadic
+     pure $ functionType' ret args' variadic
 
 %foreign (llvmext "LLVMIntType")
 prim__intType : Int -> TypeRef
 
+public export
 intType : Nat -> TypeRef
 intType w = prim__intType (cast w)
 
@@ -79,12 +85,14 @@ prim__typeOf : ValueRef -> TypeRef
 %foreign (llvmext "LLVMWriteBitcodeToFile")
 prim__writeBitcodeToFile : ModuleRef -> String -> PrimIO ()
 
+public export
 writeBitcodeToFile : HasIO io => ModuleRef -> String -> io ()
 writeBitcodeToFile m n = primIO $ prim__writeBitcodeToFile m n
 
 %foreign (llvmext "LLVMPositionBuilderAtEnd")
 prim__positionBuilderAtEnd : BuilderRef -> BasicBlockRef -> PrimIO ()
 
+public export
 positionBuilderAtEnd : HasIO io => BuilderRef -> BasicBlockRef -> io ()
 positionBuilderAtEnd builder block =
   primIO $ prim__positionBuilderAtEnd builder block
@@ -98,6 +106,7 @@ data CallConv = CCC | FastCC | ColdCC | GHCCC
 callConv : CallConv -> Int
 callConv cc = case cc of CCC => 0; FastCC => 8; ColdCC => 9; GHCCC => 10
 
+public export
 setInstructionCallConv : HasIO io => ValueRef -> CallConv -> io ()
 setInstructionCallConv f cc =
   primIO $ prim__setInstructionCallConv f (callConv cc)
@@ -106,6 +115,7 @@ setInstructionCallConv f cc =
 prim__buildCall : BuilderRef -> TypeRef -> ValueRef -> Arr' -> Int -> String ->
                   PrimIO ValueRef
 
+public export
 buildCall : {argc : Nat} ->
             HasIO io =>
             (builder : BuilderRef) ->
@@ -124,6 +134,7 @@ buildCall builder funcType func args name =
 %foreign (llvmext "LLVMBuildBr")
 prim__buildBr : BuilderRef -> BasicBlockRef -> PrimIO ValueRef
 
+public export
 buildBr : HasIO io => BuilderRef -> BasicBlockRef -> io ValueRef
 buildBr builder target = primIO $ prim__buildBr builder target
 
@@ -131,8 +142,10 @@ buildBr builder target = primIO $ prim__buildBr builder target
 prim__buildICmp : BuilderRef -> Int -> ValueRef -> ValueRef ->
                   String -> PrimIO ValueRef
 
+public export
 data IntPredicate = EQ | NE | UGT | UGE | ULT | ULE | SGT | SGE | SLT | SLE
 
+public export
 intPred : IntPredicate -> Int
 intPred EQ  = 32
 intPred NE  = 33
@@ -145,6 +158,7 @@ intPred SGE = 39
 intPred SLT = 40
 intPred SLE = 41
 
+public export
 buildICmp : HasIO io =>
             (builder : BuilderRef) ->
             (pred : IntPredicate) ->
@@ -160,6 +174,7 @@ buildICmp builder pred x y name =
 %foreign (llvmext "LLVMSizeOf")
 prim__sizeOf : TypeRef -> ValueRef
 
+public export
 sizeOf : TypeRef -> ValueRef
 sizeOf = prim__sizeOf
 
@@ -167,25 +182,30 @@ sizeOf = prim__sizeOf
 prim__pointerType : TypeRef -> Int -> TypeRef
 
 -- TODO support address spaces
+public export
 pointerType : TypeRef -> TypeRef
 pointerType t = prim__pointerType t 0
 
 %foreign (llvmext "LLVMAppendBasicBlock")
 prim__appendBasicBlock : ValueRef -> String -> PrimIO BasicBlockRef
 
+public export
 appendBasicBlock : HasIO io => ValueRef -> String -> io BasicBlockRef
 appendBasicBlock f name = primIO $ prim__appendBasicBlock f name
 
 -- TODO
+public export
 data CastMethod = IntToPtr -- ...
 
 -- TODO
+public export
 castMethod : CastMethod -> Int
 
 %foreign (llvmext "LLVMBuildCast")
 prim__buildCast : BuilderRef -> Int -> ValueRef -> TypeRef -> String ->
                   PrimIO ValueRef
 
+public export
 buildCast : HasIO io => BuilderRef -> CastMethod -> ValueRef -> TypeRef ->
             String -> io ValueRef
 buildCast builder cm x t name =
@@ -198,6 +218,7 @@ buildCast builder cm x t name =
 prim__buildPointerCast : BuilderRef -> ValueRef -> ValueRef -> String ->
                          PrimIO ValueRef
 
+public export
 buildPointerCast : HasIO io => BuilderRef -> (x, y : ValueRef) -> String ->
                    io ValueRef
 buildPointerCast builder x y name =
@@ -206,12 +227,14 @@ buildPointerCast builder x y name =
 %foreign (llvmext "LLVMBuildPhi")
 prim__buildPhi : BuilderRef -> TypeRef -> String -> PrimIO ValueRef
 
+public export
 buildPhi : HasIO io => BuilderRef -> TypeRef -> String -> io ValueRef
 buildPhi builder t name = primIO $ prim__buildPhi builder t name
 
 %foreign (llvmext "LLVMAddIncoming")
 prim__addIncoming : ValueRef -> Arr' -> Arr' -> Int -> PrimIO ()
 
+public export
 addIncoming' : HasIO io => {n : _} ->
               ValueRef -> Arr n ValueRef -> Arr n BasicBlockRef -> io ()
 addIncoming' phi vs blocks =
@@ -222,6 +245,7 @@ addIncoming' phi vs blocks =
   in
     primIO $ prim__addIncoming phi vs' blocks' n'
 
+public export
 addIncoming : HasIO io => {n : _} ->
               ValueRef -> Vect n (ValueRef, BasicBlockRef) -> io ()
 addIncoming phi xs = do let (vs, blocks) = unzip xs
@@ -233,6 +257,7 @@ addIncoming phi xs = do let (vs, blocks) = unzip xs
 prim__buildLoad : BuilderRef -> TypeRef -> ValueRef -> String ->
                   PrimIO ValueRef
 
+public export
 buildLoad : HasIO io => BuilderRef -> TypeRef -> ValueRef -> String ->
             io ValueRef
 buildLoad builder t x name = primIO $ prim__buildLoad builder t x name
@@ -240,18 +265,21 @@ buildLoad builder t x name = primIO $ prim__buildLoad builder t x name
 %foreign (llvmext "LLVMConstInt")
 prim__constInt : TypeRef -> Int -> Int -> ValueRef
 
+public export
 constInt : TypeRef -> Integer -> Bool -> ValueRef
 constInt t x signExtend = prim__constInt t (cast x) (cast signExtend)
 
 %foreign (llvmext "LLVMStructCreateNamed")
 prim__structCreateNamed : ContextRef -> String -> PrimIO TypeRef
 
+public export
 structCreateNamed : HasIO io => ContextRef -> String -> io TypeRef
 structCreateNamed ctxt name = primIO $ prim__structCreateNamed ctxt name
 
 %foreign (llvmext "LLVMStructSetBody")
 prim__structSetBody : TypeRef -> Arr' -> Int -> Int -> PrimIO ()
 
+public export
 structSetBody' : HasIO io => {n : _} ->
                 TypeRef -> Arr n TypeRef -> Bool -> io ()
 structSetBody' struct members packed =
@@ -265,19 +293,21 @@ structSetBody' struct members packed =
 %foreign (llvmext "LLVMCreateBuilder")
 prim__createBuilder : PrimIO BuilderRef
 
+public export
 createBuilder : HasIO io => io BuilderRef
 createBuilder = primIO prim__createBuilder
 
 %foreign (llvmext "LLVMBuildRet")
 prim__buildRet : BuilderRef -> ValueRef -> PrimIO ()
 
+public export
 buildRet : HasIO io => BuilderRef -> ValueRef -> io ()
 buildRet builder val = primIO $ prim__buildRet builder val
 
 main : IO ()
 main = do mod <- createModuleWithName "test_module"
           let int = intType 32
-          funcT <- functionTypeVect int [int, int] False
+          funcT <- functionType int [int, int] False
           func <- addFunction mod "test_function" funcT
           block <- appendBasicBlock func "main"
           builder <- createBuilder
