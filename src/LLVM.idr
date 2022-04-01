@@ -290,6 +290,12 @@ structSetBody' struct members packed =
   in
     primIO $ prim__structSetBody struct members' n' packed'
 
+structSetBody : HasIO io => {n : _} ->
+                TypeRef -> Vect n TypeRef -> Bool -> io ()
+structSetBody struct members packed =
+  do members' <- toArray members
+     structSetBody' struct members' packed
+
 %foreign (llvmext "LLVMCreateBuilder")
 prim__createBuilder : PrimIO BuilderRef
 
