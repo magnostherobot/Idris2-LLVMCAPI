@@ -1,12 +1,29 @@
 [{
-    "modules": [ "LLVM" ],
+    "modules": [
+        "LLVM",
+        "LLVM.Block",
+        "LLVM.Builder",
+        "LLVM.Instructions",
+        "LLVM.IO",
+        "LLVM.Module",
+        "LLVM.Types",
+        "LLVM.Value"
+    ],
     "name": "LLVMCAPI",
+
+    "_passthru": {
+      "prebuild": "make -C src",
+      "preinstall": "make -C src install"
+    },
 
     "deps": [{
         "name": "Array",
         "git": {
             "url": "https://github.com/magnostherobot/Idris2-Array",
-            "commit": "79988c3323a611170b9c2e4ebb005fc13380af84"
+            "commit": "77a4c98006fd5bae32375334ca19b3d5d1337732"
         }
+    }, {
+        "name": "contrib",
+        "legacy": true
     }]
 }]

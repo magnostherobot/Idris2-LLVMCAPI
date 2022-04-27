@@ -1,0 +1,18 @@
+[{
+  "modules": [
+    "Main",
+    "LLVMTest"
+  ],
+  "name": "LLVMCAPITests",
+  "main": "Main",
+  "deps": [{
+    "name": "LLVMCAPI",
+    "local": "../"
+  }, {
+    "name": "UnitTest",
+    "git": {
+      "url": "https://github.com/magnostherobot/Idris2-UnitTest",
+      "commit": "9297a4c8b19623372046f3d0216c65255f9c4529"
+    }
+  }]
+}]
