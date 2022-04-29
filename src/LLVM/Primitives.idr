@@ -171,3 +171,11 @@ prim__voidType : TypeRef
 public export
 %foreign (llvmext "LLVMDisposeBuilder")
 prim__disposeBuilder : BuilderRef -> PrimIO ()
+
+public export
+%foreign (llvmext "LLVMContextCreate")
+prim__contextCreate : PrimIO ContextRef
+
+public export
+%foreign (llvmext "LLVMContextDispose")
+prim__contextDispose : ContextRef -> PrimIO ()
