@@ -143,6 +143,24 @@ buildPointerCast (MkBuilder b) (MkValue x) (MkValue y) name =
   bval b !(primIO $ prim__buildPointerCast b x y name)
 
 public export
+buildGlobalString : LinearIO io =>
+                    (builder : Builder (Just bl)) ->
+                    (value : String) ->
+                    (name : String) ->
+                    L1 io $ BPair (Builder (Just bl)) Value
+buildGlobalString (MkBuilder b) value name =
+  bval b !(primIO $ prim__buildGlobalString b value name)
+
+public export
+buildGlobalStringPtr : LinearIO io =>
+                       (builder : Builder (Just bl)) ->
+                       (value : String) ->
+                       (name : String) ->
+                       L1 io $ BPair (Builder (Just bl)) Value
+buildGlobalStringPtr (MkBuilder b) value name =
+  bval b !(primIO $ prim__buildGlobalStringPtr b value name)
+
+public export
 setInstructionCallConv : HasIO io => Function -> CallConv -> io ()
 setInstructionCallConv (MkFunc f) cc =
   primIO $ prim__setInstructionCallConv f (callConv cc)

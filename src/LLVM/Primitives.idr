@@ -151,6 +151,20 @@ public export
 prim__addFunction : ModuleRef -> String -> TypeRef -> PrimIO ValueRef
 
 public export
+%foreign (llvmext "LLVMBuildGlobalString")
+prim__buildGlobalString : BuilderRef ->
+                          (value : String) ->
+                          (name : String) ->
+                          PrimIO ValueRef
+
+public export
+%foreign (llvmext "LLVMBuildGlobalString")
+prim__buildGlobalStringPtr : BuilderRef ->
+                             (value : String) ->
+                             (name : String) ->
+                             PrimIO ValueRef
+
+public export
 %foreign (llvmext "LLVMVoidType")
 prim__voidType : TypeRef
 
