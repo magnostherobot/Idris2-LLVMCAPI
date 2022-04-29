@@ -20,7 +20,7 @@
         "name": "Array",
         "git": {
             "url": "https://github.com/magnostherobot/Idris2-Array",
-            "commit": "77a4c98006fd5bae32375334ca19b3d5d1337732"
+            "commit": "7063a0f9e4db9c5e984add93dbb64e69e437d64f"
         }
     }, {
         "name": "contrib",

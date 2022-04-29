@@ -1,7 +1,9 @@
 module LLVM.Types
 
 import Data.Vect
-import Array
+import Data.Array
+
+import Control.Linear.LIO
 
 import LLVM.Primitives
 
@@ -65,18 +67,17 @@ Cast Bool Int where
   cast b = if b then 1 else 0
 
 public export
-functionType : HasIO io =>
+functionType : LinearIO io =>
                {argc : Nat} ->
                (ret : Type') ->
                (args : Vect argc Type') ->
                (variadic : Bool) ->
-               io Type'
+               L io Type'
 functionType ret args variadic = do
   let MkType ret = ret
   let args = map (\(MkType r) => r) args
   let variadic = cast variadic
-  args <- toArray args
-  let args = forgetArrType args
+  MkArr args <- toArray args
   let argc = cast argc
   let ref = prim__functionType ret args argc variadic
   pure $ MkType ref
@@ -107,15 +108,15 @@ structCreateNamed (MkCtxt ctxt) name =
   pure $ MkType !(primIO $ prim__structCreateNamed ctxt name)
 
 public export
-structSetBody : HasIO io =>
+structSetBody : LinearIO io =>
                 {n : _} ->
                 (struct : Type') ->
                 (members : Vect n Type') ->
                 (packed : Bool) ->
-                io ()
+                L io ()
 structSetBody (MkType t) xs packed = do
   let n = cast n
   let xs = map (\(MkType x) => x) xs
-  xs <- toArray xs
+  MkArr xs <- toArray xs
   let packed = cast packed
-  primIO $ prim__structSetBody t (forgetArrType xs) n packed
+  primIO $ prim__structSetBody t xs n packed

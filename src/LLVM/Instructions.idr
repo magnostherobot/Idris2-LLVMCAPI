@@ -2,7 +2,7 @@ module LLVM.Instructions
 
 import Control.Linear.LIO
 import Data.Vect
-import Array
+import Data.Array
 
 import LLVM.Block
 import LLVM.Builder
@@ -56,9 +56,9 @@ addIncoming : LinearIO io =>
               L io ()
 addIncoming (MkValue phi) vsbs = do
   let (vs, bs) = unzip vsbs
-  vs <- toArray vs
-  bs <- toArray bs
-  primIO $ prim__addIncoming phi (forgetArrType vs) (forgetArrType bs) (cast n)
+  MkArr vs <- toArray vs
+  MkArr bs <- toArray bs
+  primIO $ prim__addIncoming phi vs bs (cast n)
   pure ()
 
 public export
@@ -84,9 +84,9 @@ buildCall : {argc : Nat} ->
             (name : String) ->
             L1 io $ BPair (Builder (Just bl)) Value 
 buildCall (MkBuilder b) (MkType t) (MkFunc f) args name = do
-  args <- toArray args
+  MkArr args <- toArray args
   let argc = cast argc
-  res <- primIO $ prim__buildCall b t f (forgetArrType args) argc name
+  res <- primIO $ prim__buildCall b t f args argc name
   bval b res
 
 -- TODO not sure what "value" is returned here
@@ -136,10 +136,3 @@ public export
 setInstructionCallConv : HasIO io => Function -> CallConv -> io ()
 setInstructionCallConv (MkFunc f) cc =
   primIO $ prim__setInstructionCallConv f (callConv cc)
-
-test : IO ()
-test = run $ do b <- createBuilder
-                bl <- appendBlock ?f ""
-                b <- positionBuilderAtEnd b bl
-                B b phi <- buildPhi b ?t ""
-                disposeBuilder b

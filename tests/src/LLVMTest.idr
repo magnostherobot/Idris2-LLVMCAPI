@@ -15,16 +15,4 @@ tests = [ MkTest "createModuleWithName does not crash" $ do
         , MkTest "createModuleWithName does not crash on empty name" $ do
           _ <- createModuleWithName ""
           pass
-
-        , MkTest "addFunction does not crash" $ do
-          m <- createModuleWithName "test_module"
-          t <- functionType voidType [] False
-          _ <- addFunction m "test_func" t
-          pass
-
-        , MkTest "addFunction does not crash on empty name" $ do
-          m <- createModuleWithName "test_module"
-          t <- functionType voidType [] False
-          _ <- addFunction m "" t
-          pass
         ]

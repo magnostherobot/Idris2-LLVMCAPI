@@ -4,7 +4,9 @@ env.sh
 build/
 depends/
 LLVMCAPI.ipkg
+tests/LLVMCAPITests.ipkg
 
 *.idr~
 *.o
 *.so
+*.sw?

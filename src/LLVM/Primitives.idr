@@ -1,6 +1,6 @@
 module LLVM.Primitives
 
-import Array
+import Data.Array
 
 public export
 Opaque : String -> Type

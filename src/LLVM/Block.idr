@@ -1,7 +1,7 @@
 module LLVM.Block
 
 import Data.Fin
-import Array
+import Data.Array
 
 import LLVM.Types
 import LLVM.Primitives
