@@ -122,6 +122,14 @@ public export
 prim__buildBr : BuilderRef -> BasicBlockRef -> PrimIO ValueRef
 
 public export
+%foreign (llvmext "LLVMBuildCondBr")
+prim__buildCondBr : BuilderRef ->
+                    (if' : ValueRef) ->
+                    (then' : BasicBlockRef) ->
+                    (else' : BasicBlockRef) ->
+                    PrimIO ValueRef
+
+public export
 %foreign (llvmext "LLVMBuildCall2")
 prim__buildCall : BuilderRef -> TypeRef -> ValueRef -> Arr' -> Int -> String ->
                   PrimIO ValueRef

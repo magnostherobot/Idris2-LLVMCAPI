@@ -99,6 +99,16 @@ buildBr (MkBuilder b) (MkBlock x) =
   bval b !(primIO $ prim__buildBr b x)
 
 public export
+buildCondBr : LinearIO io =>
+              (builder : Builder (Just bl)) ->
+              (condition : Value) ->
+              (then' : Block) ->
+              (else' : Block) ->
+              L1 io $ BPair (Builder (Just bl)) Value
+buildCondBr (MkBuilder b) (MkValue c) (MkBlock t) (MkBlock e) =
+  bval b !(primIO $ prim__buildCondBr b c t e)
+
+public export
 buildICmp : LinearIO io =>
             (builder : Builder (Just bl)) ->
             (pred : IntPredicate) ->
