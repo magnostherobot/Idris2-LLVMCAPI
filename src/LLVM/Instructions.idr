@@ -77,7 +77,7 @@ buildPhiWithIncoming b t vsbs name = do
 public export
 buildCall : {argc : Nat} ->
             LinearIO io =>
-            (builder : Builder (Just bl)) ->
+            (1 builder : Builder (Just bl)) ->
             (funcType : Type') ->
             (func : Function) ->
             (args : Vect argc Value) ->
@@ -92,7 +92,7 @@ buildCall (MkBuilder b) (MkType t) (MkFunc f) args name = do
 -- TODO not sure what "value" is returned here
 public export
 buildBr : LinearIO io =>
-          (builder : Builder (Just bl)) ->
+          (1 builder : Builder (Just bl)) ->
           (target : Block) ->
           L1 io $ BPair (Builder (Just bl)) Value
 buildBr (MkBuilder b) (MkBlock x) =
@@ -100,7 +100,7 @@ buildBr (MkBuilder b) (MkBlock x) =
 
 public export
 buildCondBr : LinearIO io =>
-              (builder : Builder (Just bl)) ->
+              (1 builder : Builder (Just bl)) ->
               (condition : Value) ->
               (then' : Block) ->
               (else' : Block) ->
@@ -110,7 +110,7 @@ buildCondBr (MkBuilder b) (MkValue c) (MkBlock t) (MkBlock e) =
 
 public export
 buildICmp : LinearIO io =>
-            (builder : Builder (Just bl)) ->
+            (1 builder : Builder (Just bl)) ->
             (pred : IntPredicate) ->
             (x, y : Value) ->
             (name : String) ->
@@ -122,7 +122,7 @@ buildICmp (MkBuilder b) pred (MkValue x) (MkValue y) name = do
 
 public export
 buildCast : LinearIO io =>
-            (builder : Builder (Just bl)) ->
+            (1 builder : Builder (Just bl)) ->
             (method : CastMethod) ->
             (x : Value) ->
             (targetType : Type') ->
@@ -135,7 +135,7 @@ buildCast (MkBuilder b) method (MkValue v) (MkType t) name = do
 
 public export
 buildPointerCast : LinearIO io =>
-                   (builder : Builder (Just bl)) ->
+                   (1 builder : Builder (Just bl)) ->
                    (x, y : Value) ->
                    (name : String) ->
                    L1 io $ BPair (Builder (Just bl)) Value
@@ -144,7 +144,7 @@ buildPointerCast (MkBuilder b) (MkValue x) (MkValue y) name =
 
 public export
 buildGlobalString : LinearIO io =>
-                    (builder : Builder (Just bl)) ->
+                    (1 builder : Builder (Just bl)) ->
                     (value : String) ->
                     (name : String) ->
                     L1 io $ BPair (Builder (Just bl)) Value
@@ -153,7 +153,7 @@ buildGlobalString (MkBuilder b) value name =
 
 public export
 buildGlobalStringPtr : LinearIO io =>
-                       (builder : Builder (Just bl)) ->
+                       (1 builder : Builder (Just bl)) ->
                        (value : String) ->
                        (name : String) ->
                        L1 io $ BPair (Builder (Just bl)) Value
