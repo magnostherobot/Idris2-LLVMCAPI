@@ -146,11 +146,12 @@ buildCast (MkBuilder b) method (MkValue v) (MkType t) name = do
 public export
 buildPointerCast : LinearIO io =>
                    (1 builder : Builder (Just bl)) ->
-                   (x, y : Value) ->
+                   (x : Value) ->
+                   (t : Type') ->
                    (name : String) ->
                    L1 io $ BPair (Builder (Just bl)) Value
-buildPointerCast (MkBuilder b) (MkValue x) (MkValue y) name =
-  bval b !(primIO $ prim__buildPointerCast b x y name)
+buildPointerCast (MkBuilder b) (MkValue x) (MkType t) name =
+  bval b !(primIO $ prim__buildPointerCast b x t name)
 
 public export
 buildGlobalString : LinearIO io =>
