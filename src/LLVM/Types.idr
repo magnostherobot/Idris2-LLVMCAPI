@@ -80,6 +80,15 @@ functionType ret args variadic = do
   MkArr args <- toArray args
   let argc = cast argc
   let ref = prim__functionType ret args argc variadic
+
+  -- TODO
+  --
+  -- Part of the point of linear types is that it's hard to avoid cleaning them
+  -- up after they've been useful, but passing them to foreign functions
+  -- involves erasing their linearity. Is there a better way of doing this,
+  -- that would raise a compiler error if the following cleanup line is
+  -- omitted?
+  freeArray (MkArr args) {t = Type'} {n = cast argc}
   pure $ MkType ref
 
 public export
