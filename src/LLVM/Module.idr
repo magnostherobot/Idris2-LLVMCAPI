@@ -1,10 +1,12 @@
 module LLVM.Module
 
+import Control.Linear.LIO
+
 import LLVM.Primitives
 import LLVM.Types
 
 ||| Creates a module with the given name.
 public export
-createModuleWithName : HasIO io => String -> io Module
+createModuleWithName : LinearIO io => String -> L1 io Module
 createModuleWithName name =
-  pure $ MkModule !(primIO $ prim__createModuleWithName name)
+  pure1 $ MkModule !(primIO $ prim__createModuleWithName name)

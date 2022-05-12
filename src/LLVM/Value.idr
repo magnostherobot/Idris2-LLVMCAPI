@@ -1,10 +1,16 @@
 module LLVM.Value
 
+import Control.Linear.LIO
+
 import Data.Fin
 import Data.Array
 
 import LLVM.Primitives
 import LLVM.Types
+
+public export
+data ModuleWith : t -> Type where
+  M : (1 _ : Module) -> t -> ModuleWith t
 
 public export
 ErasableToAnyPtr Value where
@@ -20,9 +26,10 @@ Cast Value Function where
   cast (MkValue ref) = MkFunc ref
 
 public export
-addFunction : HasIO io => Module -> String -> Type' -> io Function
+addFunction : LinearIO io => (1 _ : Module) -> String -> Type' ->
+              L1 io $ ModuleWith Function
 addFunction (MkModule m) name (MkType t) =
-  pure $ MkFunc !(primIO $ prim__addFunction m name t)
+  pure1 $ M (MkModule m) (MkFunc !(primIO $ prim__addFunction m name t))
 
 public export
 constInt : Type' -> Integer -> Bool -> Value
