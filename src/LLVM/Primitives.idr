@@ -83,6 +83,10 @@ prim__buildLoad : BuilderRef -> TypeRef -> ValueRef -> String ->
                   PrimIO ValueRef
 
 public export
+%foreign (llvmext "LLVMBuildStore")
+prim__buildStore : BuilderRef -> ValueRef -> ValueRef -> PrimIO ValueRef
+
+public export
 %foreign (llvmext "LLVMAddIncoming")
 prim__addIncoming : ValueRef -> Arr' -> Arr' -> Int -> PrimIO ()
 

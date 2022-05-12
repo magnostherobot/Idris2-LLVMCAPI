@@ -36,6 +36,16 @@ buildLoad (MkBuilder ref) (MkType t) (MkValue v) name = do
   res <- primIO $ prim__buildLoad ref t v name
   bval ref res
 
+public export
+buildStore : LinearIO io =>
+             (1 b : Builder (Just bl)) ->
+             (value : Value) ->
+             (ptr : Value) ->
+             L1 io $ BPair (Builder (Just bl)) Value
+buildStore (MkBuilder ref) (MkValue v) (MkValue p) = do
+  res <- primIO $ prim__buildStore ref v p
+  bval ref res
+
 -- TODO
 -- could ensure that phis are only built as the first instruction in a block
 public export
