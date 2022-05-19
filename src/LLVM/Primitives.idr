@@ -139,6 +139,15 @@ prim__buildCall : BuilderRef -> TypeRef -> ValueRef -> Arr' -> Int -> String ->
                   PrimIO ValueRef
 
 public export
+%foreign (llvmext "LLVMBuildSwitch")
+prim__buildSwitch : BuilderRef -> ValueRef -> BasicBlockRef -> Int ->
+                    PrimIO ValueRef
+
+public export
+%foreign (llvmext "LLVMAddCase")
+prim__addCase : ValueRef -> ValueRef -> BasicBlockRef -> PrimIO ()
+
+public export
 %foreign (llvmext "LLVMFunctionType")
 prim__functionType : (ret : TypeRef) ->
                      (args : Arr') ->

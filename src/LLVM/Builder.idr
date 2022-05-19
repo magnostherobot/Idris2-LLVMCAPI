@@ -15,6 +15,10 @@ OnBlock : {b : _} -> Builder b -> Type
 OnBlock _ = IsJust b
 
 public export
+BuilderAt : Block -> Type
+BuilderAt block = Builder (Just block)
+
+public export
 createBuilder : LinearIO io => L1 io (Builder Nothing)
 createBuilder = do ref <- primIO prim__createBuilder
                    pure1 (MkBuilder ref)
