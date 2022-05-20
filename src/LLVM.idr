@@ -2,6 +2,7 @@ module LLVM
 
 import public LLVM.Block
 import public LLVM.Builder
+import public LLVM.Context
 import public LLVM.Instructions
 import public LLVM.IO
 import public LLVM.Module

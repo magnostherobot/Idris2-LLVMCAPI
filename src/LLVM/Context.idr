@@ -1,5 +1,6 @@
 module LLVM.Context
 
+import Control.Linear.LIO
 import Data.Array
 
 import LLVM.Types
@@ -11,10 +12,10 @@ ErasableToAnyPtr Context where
   unerase = MkCtxt
 
 public export
-contextCreate : HasIO io => io Context
+contextCreate : LinearIO io => L1 io Context
 contextCreate = do ref <- primIO prim__contextCreate
-                   pure $ MkCtxt ref
+                   pure1 $ MkCtxt ref
 
 public export
-contextDispose : HasIO io => Context -> io ()
+contextDispose : HasIO io => (1 ctxt : Context) -> io ()
 contextDispose (MkCtxt ref) = primIO $ prim__contextDispose ref
