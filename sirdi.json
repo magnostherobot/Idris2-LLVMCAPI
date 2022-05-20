@@ -3,6 +3,7 @@
         "LLVM",
         "LLVM.Block",
         "LLVM.Builder",
+	"LLVM.Context",
         "LLVM.Instructions",
         "LLVM.IO",
         "LLVM.Module",
