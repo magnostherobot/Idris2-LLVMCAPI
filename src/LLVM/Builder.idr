@@ -24,8 +24,7 @@ createBuilder = do ref <- primIO prim__createBuilder
                    pure1 (MkBuilder ref)
 
 public export
-disposeBuilder : LinearIO io => {b : Maybe Block} ->
-                 (1 b : Builder b) -> L io ()
+disposeBuilder : HasIO io => (1 b : Builder mb) -> io ()
 disposeBuilder (MkBuilder ref) = primIO $ prim__disposeBuilder ref
 
 public export
