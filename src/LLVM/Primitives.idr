@@ -160,6 +160,10 @@ public export
 prim__createModuleWithName : String -> PrimIO ModuleRef
 
 public export
+%foreign (llvmext "LLVMDisposeModule")
+prim__disposeModule : ModuleRef -> PrimIO ()
+
+public export
 %foreign (llvmext "LLVMAddFunction")
 prim__addFunction : ModuleRef -> String -> TypeRef -> PrimIO ValueRef
 

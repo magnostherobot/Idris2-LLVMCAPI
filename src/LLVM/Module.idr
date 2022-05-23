@@ -10,3 +10,7 @@ public export
 createModuleWithName : LinearIO io => String -> L1 io Module
 createModuleWithName name =
   pure1 $ MkModule !(primIO $ prim__createModuleWithName name)
+
+public export
+disposeModule : HasIO io => (1 mod : Module) -> io ()
+disposeModule (MkModule m) = primIO $ prim__disposeModule m
