@@ -54,6 +54,10 @@ public export
 prim__writeBitcodeToFile : ModuleRef -> String -> PrimIO ()
 
 public export
+%foreign (llvmext "LLVMWriteBitcodeToMemoryBufffer")
+prim__writeBitcodeToMemoryBuffer : ModuleRef -> PrimIO String
+
+public export
 %foreign (llvmext "LLVMIntType")
 prim__intType : Int -> TypeRef
 
