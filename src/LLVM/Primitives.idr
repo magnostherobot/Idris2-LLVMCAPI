@@ -49,13 +49,21 @@ public export
 %foreign (llvmext "LLVMTypeOf")
 prim__typeOf : ValueRef -> TypeRef
 
+-- TODO
+--
+-- Docs say to use LLVMDisposeMessage to free this string:
+-- https://llvm.org/doxygen/group__LLVMCCoreModule.html#gad150d942dc9f49238f57cb89464c01df
+public export
+%foreign (llvmext "LLVMPrintModuleToString")
+prim__printModuleToString : ModuleRef -> PrimIO String
+
 public export
 %foreign (llvmext "LLVMWriteBitcodeToFile")
 prim__writeBitcodeToFile : ModuleRef -> String -> PrimIO ()
 
 public export
 %foreign (llvmext "LLVMWriteBitcodeToMemoryBuffer")
-prim__writeBitcodeToMemoryBuffer : ModuleRef -> PrimIO String
+prim__writeBitcodeToMemoryBuffer : ModuleRef -> PrimIO AnyPtr
 
 public export
 %foreign (llvmext "LLVMIntType")

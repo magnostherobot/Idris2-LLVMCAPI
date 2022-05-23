@@ -1,5 +1,6 @@
 module LLVM.IO
 
+import System.FFI
 import Control.Linear.LIO
 
 import LLVM.Module
@@ -21,14 +22,28 @@ writeBitcodeToFile' mod filename = do
 
 public export
 writeBitcodeToMemoryBuffer : LinearIO io => (1 mod : Module) ->
-                             L1 io (ModuleWith String)
+                             L1 io (ModuleWith AnyPtr)
 writeBitcodeToMemoryBuffer (MkModule m) = do
   buf <- primIO $ prim__writeBitcodeToMemoryBuffer m
   pure1 $ M (MkModule m) buf
 
 public export
-writeBitcodeToMemoryBuffer' : LinearIO io => (1 mod : Module) -> L io String
+writeBitcodeToMemoryBuffer' : LinearIO io => (1 mod : Module) -> L io AnyPtr
 writeBitcodeToMemoryBuffer' mod = do
   M mod buf <- writeBitcodeToMemoryBuffer mod
   disposeModule mod
   pure buf
+
+public export
+printModuleToString : LinearIO io => (1 mod : Module) ->
+                      L1 io (ModuleWith String)
+printModuleToString (MkModule m) = do
+  str <- primIO $ prim__printModuleToString m
+  pure1 $ M (MkModule m) str
+
+public export
+printModuleToString' : LinearIO io => (1 mod : Module) -> L io String
+printModuleToString' mod = do
+  M mod str <- printModuleToString mod
+  disposeModule mod
+  pure str
