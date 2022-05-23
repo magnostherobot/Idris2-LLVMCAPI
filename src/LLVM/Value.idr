@@ -32,6 +32,10 @@ addFunction (MkModule m) name (MkType t) =
   pure1 $ M (MkModule m) (MkFunc !(primIO $ prim__addFunction m name t))
 
 public export
+getParam : Function -> Nat -> Value
+getParam (MkFunc f) i = MkValue $ prim__getParam f (cast i)
+
+public export
 constInt : Type' -> Integer -> Bool -> Value
 constInt (MkType t) x signExtend =
   MkValue $ prim__constInt t (cast x) (cast signExtend)

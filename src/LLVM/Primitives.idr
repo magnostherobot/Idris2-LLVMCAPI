@@ -168,6 +168,10 @@ prim__functionType : (ret : TypeRef) ->
                      TypeRef
 
 public export
+%foreign (llvmext "LLVMGetParam")
+prim__getParam : ValueRef -> Int -> ValueRef
+
+public export
 %foreign (llvmext "LLVMModuleCreateWithName")
 prim__createModuleWithName : String -> PrimIO ModuleRef
 
