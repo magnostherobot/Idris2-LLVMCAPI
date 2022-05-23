@@ -33,6 +33,7 @@ BuildResultAt block = BuildResult (Just block)
 
 bres : LinearIO io => BuilderRef -> ValueRef ->
        L1 io $ BuildResultAt block Value
+bres bref vref = pure1 $ Result (MkBuilder bref) (MkValue vref)
 
 public export
 buildRet : LinearIO io =>
