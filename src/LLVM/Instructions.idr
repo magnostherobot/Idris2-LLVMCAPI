@@ -10,8 +10,6 @@ import LLVM.Primitives
 import LLVM.Types
 import LLVM.Value
 
-infixr 5 <#
-
 {- TODO
  -
  - Currently this type requires that the block be in the type of the function,

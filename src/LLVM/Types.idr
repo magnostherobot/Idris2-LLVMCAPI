@@ -66,6 +66,16 @@ public export
 Cast Bool Int where
   cast b = if b then 1 else 0
 
+infixr 5 <#
+
+public export
+data LLPair : Type -> Type -> Type where
+  (<#) : (1 l : a) -> (r : b) -> LLPair a b
+
+public export
+ContextWith : Type -> Type
+ContextWith = LLPair Context
+
 public export
 functionType : LinearIO io =>
                {argc : Nat} ->
@@ -109,12 +119,13 @@ sizeOf : Type' -> Value
 sizeOf (MkType t) = MkValue $ prim__sizeOf t
 
 public export
-structCreateNamed : HasIO io =>
-                    (context : Context) ->
+structCreateNamed : LinearIO io =>
+                    (1 context : Context) ->
                     (name : String) ->
-                    io Type'
-structCreateNamed (MkCtxt ctxt) name =
-  pure $ MkType !(primIO $ prim__structCreateNamed ctxt name)
+                    L1 io (ContextWith Type')
+structCreateNamed (MkCtxt ctxt) name = do
+  t <- primIO $ prim__structCreateNamed ctxt name
+  pure1 (MkCtxt ctxt <# MkType t)
 
 public export
 structSetBody : LinearIO io =>
