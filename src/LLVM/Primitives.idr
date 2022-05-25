@@ -86,6 +86,11 @@ public export
 prim__structCreateNamed : ContextRef -> String -> PrimIO TypeRef
 
 public export
+%foreign (llvmext "LLVMBuildStructGEP")
+prim__buildStructGEP : BuilderRef -> TypeRef -> ValueRef -> Int -> String ->
+                       PrimIO TypeRef
+
+public export
 %foreign (llvmext "LLVMConstInt")
 prim__constInt : TypeRef -> Int -> Int -> ValueRef
 

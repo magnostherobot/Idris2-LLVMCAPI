@@ -179,6 +179,17 @@ buildPointerCast (MkBuilder b) (MkValue x) (MkType t) name =
   bres b !(primIO $ prim__buildPointerCast b x t name)
 
 public export
+buildStructGEP : LinearIO io =>
+                 (1 builder : BuilderAt block) ->
+                 (structType : Type') ->
+                 (struct : Value) ->
+                 (index : Nat) ->
+                 (name : String) ->
+                 L1 io (BuildResultAt block Value)
+buildStructGEP (MkBuilder b) (MkType t) (MkValue v) index name =
+  bres b !(primIO $ prim__buildStructGEP b t v (cast index) name)
+
+public export
 buildSwitch : LinearIO io =>
               (1 builder : BuilderAt block) ->
               Value ->
