@@ -119,6 +119,10 @@ sizeOf : Type' -> Value
 sizeOf (MkType t) = MkValue $ prim__sizeOf t
 
 public export
+typeOf : Value -> Type'
+typeOf (MkValue v) = MkType $ prim__typeOf v
+
+public export
 structCreateNamed : LinearIO io =>
                     (1 context : Context) ->
                     (name : String) ->
