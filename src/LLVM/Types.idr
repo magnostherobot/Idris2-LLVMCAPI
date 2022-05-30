@@ -143,4 +143,5 @@ structSetBody (MkType t) xs packed = do
   let xs = map (\(MkType x) => x) xs
   MkArr xs <- toArray xs
   let packed = cast packed
+  freeArray (MkArr xs) {t = TypeRef} {n = cast n}
   primIO $ prim__structSetBody t xs n packed
