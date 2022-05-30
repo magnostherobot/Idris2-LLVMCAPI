@@ -181,6 +181,10 @@ public export
 prim__createModuleWithName : String -> PrimIO ModuleRef
 
 public export
+%foreign (llvmext "LLVMModuleCreateWithNameInContext")
+prim__createModuleWithNameInContext : String -> ContextRef -> PrimIO ModuleRef
+
+public export
 %foreign (llvmext "LLVMDisposeModule")
 prim__disposeModule : ModuleRef -> PrimIO ()
 

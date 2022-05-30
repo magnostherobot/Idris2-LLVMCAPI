@@ -7,9 +7,13 @@ import LLVM.Types
 
 ||| Creates a module with the given name.
 public export
-createModuleWithName : LinearIO io => String -> L1 io Module
-createModuleWithName name =
-  pure1 $ MkModule !(primIO $ prim__createModuleWithName name)
+createModuleWithName : LinearIO io =>
+                       (name : String) ->
+                       (1 ctxt : Context) ->
+                       L1 io (LPair Context Module)
+createModuleWithName name (MkCtxt c) = do
+  m <- primIO $ prim__createModuleWithNameInContext name c
+  pure1 (MkCtxt c # MkModule m)
 
 public export
 disposeModule : HasIO io => (1 mod : Module) -> io ()
