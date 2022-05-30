@@ -98,7 +98,7 @@ functionType ret args variadic = do
   -- involves erasing their linearity. Is there a better way of doing this,
   -- that would raise a compiler error if the following cleanup line is
   -- omitted?
-  freeArray (MkArr args) {t = Type'} {n = cast argc}
+  -- freeArray (MkArr args) {t = Type'} {n = cast argc}
   pure $ MkType ref
 
 public export
@@ -143,5 +143,5 @@ structSetBody (MkType t) xs packed = do
   let xs = map (\(MkType x) => x) xs
   MkArr xs <- toArray xs
   let packed = cast packed
-  freeArray (MkArr xs) {t = TypeRef} {n = cast n}
+  -- freeArray (MkArr xs) {t = TypeRef} {n = cast n}
   primIO $ prim__structSetBody t xs n packed
