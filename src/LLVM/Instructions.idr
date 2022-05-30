@@ -177,15 +177,31 @@ buildPointerCast (MkBuilder b) (MkValue x) (MkType t) name =
   bres b !(primIO $ prim__buildPointerCast b x t name)
 
 public export
+buildGEP : LinearIO io =>
+           {n : Nat} ->
+           (1 builder : BuilderAt block) ->
+           (type : Type') ->
+           (pointer : Value) ->
+           (indices : Vect n Value) ->
+           (name : String) ->
+           L1 io (BuildResultAt block Value)
+buildGEP (MkBuilder b) (MkType t) (MkValue v) indices name = do
+  MkArr indices <- toArray indices
+  res <- primIO $ prim__buildGEP b t v indices (cast n) name
+  -- FIXME: memory leak
+  bres b res
+
+public export
 buildStructGEP : LinearIO io =>
                  (1 builder : BuilderAt block) ->
                  (structType : Type') ->
-                 (struct : Value) ->
+                 (pointer : Value) ->
                  (index : Nat) ->
                  (name : String) ->
                  L1 io (BuildResultAt block Value)
-buildStructGEP (MkBuilder b) (MkType t) (MkValue v) index name =
-  bres b !(primIO $ prim__buildStructGEP b t v (cast index) name)
+buildStructGEP (MkBuilder b) (MkType t) (MkValue v) i name = do
+  res <- primIO $ prim__buildStructGEP b t v (cast i) name
+  bres b res
 
 public export
 buildSwitch : LinearIO io =>

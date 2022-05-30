@@ -86,13 +86,54 @@ public export
 prim__structSetBody : TypeRef -> Arr' -> Int -> Int -> PrimIO ()
 
 public export
+%foreign (llvmext "LLVMStructTypeInContext")
+prim__structTypeInContext : ContextRef -> Arr' -> Int -> Int -> PrimIO TypeRef
+
+public export
+%foreign (llvmext "LLVMStructType")
+prim__structType : ContextRef -> Arr' -> Int -> Int -> PrimIO TypeRef
+
+public export
+%foreign (llvmext "LLVMGetStructName")
+prim__getStructName : TypeRef -> String
+
+public export
+%foreign (llvmext "LLVMCountStructElementTypes")
+prim__countStructElementTypes : TypeRef -> Int
+
+public export
+%foreign (llvmext "LLVMGetStructElementTypes")
+prim__getStructElementTypes : TypeRef -> Arr'
+
+public export
+%foreign (llvmext "LLVMStructGetTypeAtIndex")
+prim__structGetTypeAtIndex : TypeRef -> Int -> TypeRef
+
+public export
+%foreign (llvmext "LLVMIsPackedStruct")
+prim__isPackedStruct : TypeRef -> Int
+
+public export
+%foreign (llvmext "LLVMIsOpaqueStruct")
+prim__isOpaqueStruct : TypeRef -> Int
+
+public export
+%foreign (llvmext "LLVMIsLiteralStruct")
+prim__isLiteralStruct : TypeRef -> Int
+
+public export
 %foreign (llvmext "LLVMStructCreateNamed")
 prim__structCreateNamed : ContextRef -> String -> PrimIO TypeRef
 
 public export
-%foreign (llvmext "LLVMBuildStructGEP")
-prim__buildStructGEP : BuilderRef -> TypeRef -> ValueRef -> Int -> String ->
-                       PrimIO TypeRef
+%foreign (llvmext "LLVMBuildGEP2")
+prim__buildGEP : BuilderRef -> TypeRef -> ValueRef -> Arr' -> Int ->
+                 String -> PrimIO ValueRef
+
+public export
+%foreign (llvmext "LLVMBuildStructGEP2")
+prim__buildStructGEP : BuilderRef -> TypeRef -> ValueRef -> Int ->
+                       String -> PrimIO ValueRef
 
 public export
 %foreign (llvmext "LLVMConstInt")
