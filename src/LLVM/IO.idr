@@ -47,3 +47,9 @@ printModuleToString' mod = do
   M mod str <- printModuleToString mod
   disposeModule mod
   pure str
+
+public export
+dumpModule : LinearIO io => (1 mod : Module) -> L1 io Module
+dumpModule (MkModule m) = do
+  primIO $ prim__dumpModule m
+  pure1 (MkModule m)

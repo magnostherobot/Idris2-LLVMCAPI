@@ -66,6 +66,10 @@ public export
 prim__writeBitcodeToMemoryBuffer : ModuleRef -> PrimIO AnyPtr
 
 public export
+%foreign (llvmext "LLVMDumpModule")
+prim__dumpModule : ModuleRef -> PrimIO ()
+
+public export
 %foreign (llvmext "LLVMIntType")
 prim__intType : Int -> TypeRef
 
